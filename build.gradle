@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+    id 'application'
+	id 'eclipse'
+	id 'idea'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:27.0.1-jre'
+	implementation 'org.reflections:reflections:0.9.11'
+    implementation  'com.miglayout:miglayout:3.7.4'
+
+    testImplementation 'junit:junit:4.12'
+}
+
+sourceCompatibility = '12'
+targetCompatibility = '12'
+
+mainClassName = 'be.seeseemelk.easydsp.EasyDSP'
