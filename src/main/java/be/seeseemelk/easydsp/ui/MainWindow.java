@@ -1,24 +1,20 @@
 package be.seeseemelk.easydsp.ui;
 
+import be.seeseemelk.easydsp.Engine;
+import be.seeseemelk.easydsp.modules.ModuleFactory;
+
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeListener;
 import java.util.logging.Logger;
-import javax.swing.*;
-import javax.swing.border.Border;
-
-import be.seeseemelk.easydsp.Engine;
-import be.seeseemelk.easydsp.modules.Module;
-import be.seeseemelk.easydsp.modules.ModuleFactory;
 
 public class MainWindow extends JFrame
 {
 	private static final long serialVersionUID = 1L;
 	private Logger logger = Logger.getLogger("MainWindow");
-	private DefaultListModel<ModuleFactory> moduleList = new DefaultListModel<>();
 	private final Engine engine;
+	private ModuleBox box;
 	
 	public MainWindow(Engine engine)
 	{
@@ -74,34 +70,48 @@ public class MainWindow extends JFrame
 	private void initContent()
 	{
 		JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		
-		JList<ModuleFactory> list = new JList<>(moduleList);
-		list.setModel(moduleList);
-		
-		var minimumSize = list.getMinimumSize();
-		minimumSize.width = 300;
-		list.setMinimumSize(minimumSize);
+
+		var modules = createModuleList();
 			
-		pane.add(list);
+		pane.add(modules);
 		
-		ModuleBox box = new ModuleBox(engine);
+		box = new ModuleBox(engine);
 		pane.add(box);
 		
-		list.addMouseListener(new MouseAdapter()
+		add(pane, BorderLayout.CENTER);
+	}
+
+	private JComponent createModuleList()
+	{
+		var model = new ModuleTreeModel(engine);
+
+		var tree = new JTree();
+		tree.setModel(model);
+		tree.setRootVisible(false);
+		for (int i = model.getChildCount(model.getRoot()) - 1; i >= 0; i--)
+			tree.expandRow(i);
+
+		tree.addMouseListener(new MouseAdapter()
 		{
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
 				if (e.getClickCount() == 2)
 				{
-					var factory = list.getSelectedValue();
-					if (factory != null)
-						engine.createModule(factory).ifPresent(box::addModule);
+					var object = tree.getLastSelectedPathComponent();
+					if (model.isLeaf(object))
+					{
+						engine.createModule((ModuleFactory) object).ifPresent(box::addModule);
+					}
 				}
 			}
 		});
-		
-		add(pane, BorderLayout.CENTER);
+
+		var minimumSize = tree.getMinimumSize();
+		minimumSize.width = 200;
+		tree.setMinimumSize(minimumSize);
+
+		return tree;
 	}
 
 	private void toggleSimulation()
@@ -119,12 +129,6 @@ public class MainWindow extends JFrame
 			button.setText("Stop Simulation");
 		else
 			button.setText("Start Simulation");
-	}
-	
-	public void registerModule(ModuleFactory factory)
-	{
-		moduleList.addElement(factory);
-		logger.info("Module " + factory.getName() + " was added");
 	}
 }
 

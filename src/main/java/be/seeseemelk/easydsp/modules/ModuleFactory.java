@@ -8,11 +8,13 @@ public class ModuleFactory
 {
 	private final Class<? extends Module> module;
 	private final String name;
+	private final ModuleGroup group;
 	
 	public ModuleFactory(Class<? extends Module> module)
 	{
 		this.module = module;
 		this.name = module.getAnnotation(DSPModule.class).value();
+		this.group = module.getAnnotation(DSPModule.class).group();
 	}
 
 	public Class<? extends Module> getModule()
@@ -24,7 +26,12 @@ public class ModuleFactory
 	{
 		return name;
 	}
-	
+
+	public ModuleGroup getGroup()
+	{
+		return group;
+	}
+
 	public Module create(Engine engine, int id)
 	{
 		try

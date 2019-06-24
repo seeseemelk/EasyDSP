@@ -29,28 +29,10 @@ public class EasyDSP
 	public void open()
 	{
 		SwingUtilities.invokeLater(() -> {
-			window = new MainWindow(engine);
 			loadAnnotatedModules();
+			window = new MainWindow(engine);
 			window.setVisible(true);
 		});
-	}
-	
-	/**
-	 * Registers a new module to the application.
-	 * @param factory The module to add.
-	 */
-	public void registerModule(ModuleFactory factory)
-	{
-		window.registerModule(factory);
-	}
-	
-	/**
-	 * Registers a new module to the application.
-	 * @param module The module to register.
-	 */
-	public void registerModule(Class<? extends Module> module)
-	{
-		registerModule(new ModuleFactory(module));
 	}
 	
 	private void loadAnnotatedModules()
@@ -60,7 +42,7 @@ public class EasyDSP
 		for (Class<?> annotated : reflections.getTypesAnnotatedWith(DSPModule.class))
 		{
 			Class<? extends Module> module = annotated.asSubclass(Module.class);
-			registerModule(module);
+			engine.registerModule(module);
 			count++;
 		}
 		logger.info(String.format("Loaded %d modules", count));

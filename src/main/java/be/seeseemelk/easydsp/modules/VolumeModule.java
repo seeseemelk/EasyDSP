@@ -5,7 +5,7 @@ import be.seeseemelk.easydsp.streams.OutputPort;
 
 import javax.swing.*;
 
-@DSPModule("Volume")
+@DSPModule(value = "Volume", group = ModuleGroup.EFFECT)
 public class VolumeModule extends Module implements OutputPort
 {
 	private InputPipe input;

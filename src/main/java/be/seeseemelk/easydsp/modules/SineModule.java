@@ -4,7 +4,7 @@ import javax.swing.JSlider;
 
 import be.seeseemelk.easydsp.streams.OutputPort;
 
-@DSPModule("Sine Generator")
+@DSPModule(value = "Sine Generator", group = ModuleGroup.GENERATOR)
 public class SineModule extends Module implements OutputPort
 {
 	private float frequency = 200.0f;

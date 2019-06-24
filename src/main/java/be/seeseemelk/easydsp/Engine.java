@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 public class Engine
 {
 	private Logger logger = Logger.getLogger("DSPEngine");
+	private List<ModuleFactory> moduleFactories = new ArrayList<>();
 	private List<Module> modules = new ArrayList<>();
 	private List<RunnableModule> runnableModules = new LinkedList<>();
 	private int nextModuleId = 0;
@@ -26,7 +27,10 @@ public class Engine
 	private float sampleRate = 44100f;
 	private long executionInterval = 10;
 	private long samplesPlayed = 0;
-	private final AudioFormat format = new AudioFormat(sampleRate, 24, 1, true, false);
+
+	public Engine()
+	{
+	}
 
 	public void removeModule(Module module)
 	{
@@ -62,6 +66,30 @@ public class Engine
 	}
 
 	/**
+	 * Registers a new module to the application.
+	 * @param factory The module to add.
+	 */
+	public void registerModule(ModuleFactory factory)
+	{
+		moduleFactories.add(factory);
+		logger.info("Module " + factory.getName() + " was added");
+	}
+
+	/**
+	 * Registers a new module to the application.
+	 * @param module The module to register.
+	 */
+	public void registerModule(Class<? extends Module> module)
+	{
+		registerModule(new ModuleFactory(module));
+	}
+
+	public List<ModuleFactory> getModuleFactories()
+	{
+		return moduleFactories;
+	}
+
+	/**
 	 * The number of samples per second to play.
 	 * @return The number of samples per second to play.
 	 */
@@ -75,15 +103,15 @@ public class Engine
 		return executionInterval;
 	}
 
-	public long getSamplesPerExecution()
+	public int getSamplesPerExecution()
 	{
 		return 4096;
 	}
 
-	public AudioFormat getFormat()
+	/*public AudioFormat getFormat()
 	{
 		return format;
-	}
+	}*/
 
 	public double getRuntime()
 	{

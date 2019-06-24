@@ -20,4 +20,9 @@ public @interface DSPModule
 	 * The name of the module.
 	 */
 	String value();
+
+	/**
+	 * The group the module belongs to.
+	 */
+	ModuleGroup group() default ModuleGroup.OTHER;
 }

@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.lang.annotation.Target;
 
-@DSPModule("Microphone")
+@DSPModule(value = "Microphone", group = ModuleGroup.BASIC)
 public class MicModule extends Module implements OutputPort
 {
 	private float[] buffer;
@@ -23,10 +23,11 @@ public class MicModule extends Module implements OutputPort
 
 		createOutput("Output", this);
 
-		buffer = new float[(int) getEngine().getSamplesPerExecution()];
+		buffer = new float[getEngine().getSamplesPerExecution()];
 
 		// Open microphone input
-		var format = new AudioFormat(44100f, 24, 1, true, false);
+		//var format = new AudioFormat(44100f, 24, 1, true, false);
+		var format = new AudioFormat(44100f, 16, 1, true, false);
 
 		var info = new DataLine.Info(TargetDataLine.class, format);
 		if (!AudioSystem.isLineSupported(info))
@@ -35,7 +36,7 @@ public class MicModule extends Module implements OutputPort
 		try
 		{
 			line = (TargetDataLine) AudioSystem.getLine(info);
-			lineBuffer = new byte[buffer.length * 3];
+			lineBuffer = new byte[buffer.length * 2];
 			line.open(format, lineBuffer.length);
 			line.start();
 		}
@@ -66,13 +67,18 @@ public class MicModule extends Module implements OutputPort
 	{
 		line.read(lineBuffer, 0, lineBuffer.length);
 
-		for (int i = 0, y = 0; i < lineBuffer.length; i += 3, y++)
+		for (int i = 0, y = 0; i < lineBuffer.length; i += 2, y++)
 		{
-			int a = Byte.toUnsignedInt(lineBuffer[i + 0]);
+			/*int a = Byte.toUnsignedInt(lineBuffer[i + 0]);
 			int b = Byte.toUnsignedInt(lineBuffer[i + 1]);
 			int c = lineBuffer[i + 2];
 			int intValue = (a | (b << 8) | (c << 16));
-			buffer[y] = ((float) intValue) / 0x007F_FFFF;
+			buffer[y] = ((float) intValue) / 0x007F_FFFF;*/
+
+			int a = Byte.toUnsignedInt(lineBuffer[i]);
+			int b = lineBuffer[i + 1];
+			int intValue = (a | (b << 8));
+			buffer[y] = (((float) intValue) / 0x7FFF) * volume;
 		}
 	}
 

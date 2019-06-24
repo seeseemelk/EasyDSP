@@ -6,7 +6,7 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 
-@DSPModule("Output")
+@DSPModule(value = "Output", group = ModuleGroup.BASIC)
 public class OutputModule extends RunnableModule
 {
 	private float[] buffer;
@@ -26,23 +26,16 @@ public class OutputModule extends RunnableModule
 		buffer = new float[(int) getEngine().getSamplesPerExecution()];
 
 		// Open speaker
-		var format = new AudioFormat(44100f, 24, 1, true, false);
+		var format = new AudioFormat(44100f, 16, 1, true, false);
 
 		var info = new DataLine.Info(SourceDataLine.class, format);
 		if (!AudioSystem.isLineSupported(info))
 			System.err.println("Line not supported");
 
-		try
-		{
-			line = (SourceDataLine) AudioSystem.getLine(info);
-			lineBuffer = new byte[buffer.length * 3];
-			line.open(format, lineBuffer.length);
-			line.start();
-		}
-		catch (LineUnavailableException ex)
-		{
-			ex.printStackTrace();
-		}
+		line = (SourceDataLine) AudioSystem.getLine(info);
+		lineBuffer = new byte[buffer.length * 2];
+		line.open(format, lineBuffer.length);
+		line.start();
 
 		// Add slider
 		int maxValue = 10_000;
@@ -64,10 +57,13 @@ public class OutputModule extends RunnableModule
 		int i = 0;
 		for (float value : buffer)
 		{
-			int intValue = (int) ((value * volume) * 0x007F_FFFF);
+			/*int intValue = (int) ((value * volume) * 0x007F_FFFF);
 			lineBuffer[i++] = (byte) (intValue);
 			lineBuffer[i++] = (byte) (intValue >> 8);
-			lineBuffer[i++] = (byte) (intValue >> 16);
+			lineBuffer[i++] = (byte) (intValue >> 16);*/
+			int intValue = (int) ((value * volume) * 0x7FFF);
+			lineBuffer[i++] = (byte) (intValue);
+			lineBuffer[i++] = (byte) (intValue >> 8);
 		}
 
 		line.write(lineBuffer, 0, lineBuffer.length);
