@@ -71,8 +71,27 @@ public abstract class Module
 	}
 
 	public void delete()
-	{
-	}
+	{}
+
+	/**
+	 * Gets executed when the 'Start Simulation' button is pressed.
+	 */
+	public void onStart()
+	{}
+
+	/**
+	 * Gets executed when the 'Stop Simulation' button is pressed.
+	 */
+	public void onStop()
+	{}
+
+	/**
+	 * Gets executed right before each cycle.
+	 * This can be used to read and cache information from a microphone for instance.
+	 * It should *NOT* access any pipes.
+	 */
+	public void onCycle()
+	{}
 	
 	public void setName(String name)
 	{

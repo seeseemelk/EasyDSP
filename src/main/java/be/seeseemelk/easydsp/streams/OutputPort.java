@@ -6,5 +6,5 @@ package be.seeseemelk.easydsp.streams;
 @FunctionalInterface
 public interface OutputPort
 {
-	void read(float[] buffer);
+	boolean read(float[] buffer);
 }

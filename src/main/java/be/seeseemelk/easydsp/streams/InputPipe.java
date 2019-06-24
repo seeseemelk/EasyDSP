@@ -35,10 +35,18 @@ public class InputPipe
 
 	public void connect(OutputPipe port)
 	{
+		port.connect(this);
 		this.output = port;
 	}
 
 	public void disconnect()
+	{
+		if (output != null)
+			output.doDisconnect(this);
+		doDisconnect();
+	}
+
+	void doDisconnect()
 	{
 		output = null;
 	}
@@ -57,9 +65,11 @@ public class InputPipe
 			return String.format("%s (connected to %s)", name, output.getModule().toString());
 	}
 
-	public void read(float[] buffer)
+	public boolean read(float[] buffer)
 	{
 		if (output != null)
-			output.read(buffer);
+			return output.read(buffer);
+		else
+			return false;
 	}
 }

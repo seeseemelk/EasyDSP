@@ -3,25 +3,29 @@ package be.seeseemelk.easydsp.modules;
 import be.seeseemelk.easydsp.streams.InputPipe;
 
 import javax.sound.sampled.*;
+import javax.swing.*;
+import java.awt.*;
 
-@DSPModule("Output Module")
+@DSPModule("Output")
 public class OutputModule extends RunnableModule
 {
 	private float[] buffer;
 	private byte[] lineBuffer;
 	private InputPipe input;
 	private SourceDataLine line;
+	private float volume = 1.0f;
 
 	@Override
 	public void init() throws LineUnavailableException
 	{
-		setColor(255, 255, 0);
+		setColor(new Color(144, 255, 33));
 		setDescription("Play backs its inputs to the default audio device.");
 
 		input = createInput("Input");
 
 		buffer = new float[(int) getEngine().getSamplesPerExecution()];
 
+		// Open speaker
 		var format = new AudioFormat(44100f, 24, 1, true, false);
 
 		var info = new DataLine.Info(SourceDataLine.class, format);
@@ -34,28 +38,33 @@ public class OutputModule extends RunnableModule
 			lineBuffer = new byte[buffer.length * 3];
 			line.open(format, lineBuffer.length);
 			line.start();
-			System.out.println("Line opened");
-			System.out.println("Buffer size: " + line.getBufferSize());
-			System.out.println("Volume: " + line.getLevel());
-			if (line.getLevel() == AudioSystem.NOT_SPECIFIED)
-				System.out.println("Not specified!");
 		}
 		catch (LineUnavailableException ex)
 		{
 			ex.printStackTrace();
 		}
+
+		// Add slider
+		int maxValue = 10_000;
+		JSlider slider = new JSlider(0, maxValue, maxValue);
+		slider.setPaintTicks(true);
+		slider.setMinorTickSpacing(1000);
+		slider.addChangeListener(e -> {
+			volume = ((float) slider.getValue()) / maxValue;
+		});
+		addOption("Volume", slider);
 	}
 
 	@Override
 	public void run()
 	{
-		input.read(buffer);
+		if (!input.read(buffer))
+			return;
 
 		int i = 0;
 		for (float value : buffer)
-		//for (int y = 0; y < buffer.length; y++)
 		{
-			int intValue = (int) (value * 100000);
+			int intValue = (int) ((value * volume) * 0x007F_FFFF);
 			lineBuffer[i++] = (byte) (intValue);
 			lineBuffer[i++] = (byte) (intValue >> 8);
 			lineBuffer[i++] = (byte) (intValue >> 16);

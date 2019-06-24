@@ -3,6 +3,8 @@ package be.seeseemelk.easydsp;
 import be.seeseemelk.easydsp.modules.Module;
 import be.seeseemelk.easydsp.modules.ModuleFactory;
 import be.seeseemelk.easydsp.modules.RunnableModule;
+import be.seeseemelk.easydsp.streams.InputPipe;
+import be.seeseemelk.easydsp.streams.OutputPipe;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -23,10 +25,17 @@ public class Engine
 	private Timer timer;
 	private float sampleRate = 44100f;
 	private long executionInterval = 10;
+	private long samplesPlayed = 0;
 	private final AudioFormat format = new AudioFormat(sampleRate, 24, 1, true, false);
 
 	public void removeModule(Module module)
 	{
+		for (var input : module.getInputs())
+			input.disconnect();
+
+		for (var output : module.getOutputs())
+			output.disconnectAll();
+
 		module.delete();
 		modules.remove(module);
 		if (module instanceof RunnableModule)
@@ -81,8 +90,17 @@ public class Engine
 		return runtime;
 	}
 
+	public long getSamplesPlayed()
+	{
+		return samplesPlayed;
+	}
+
 	public void start()
 	{
+		for (var module : modules)
+			module.onStart();
+
+		samplesPlayed = 0;
 		running = true;
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask()
@@ -97,6 +115,9 @@ public class Engine
 
 	public void stop()
 	{
+		for (var module : modules)
+			module.onStop();
+
 		running = false;
 		timer.cancel();
 	}
@@ -110,15 +131,18 @@ public class Engine
 	{
 		try
 		{
+			for (var module : modules)
+				module.onCycle();
+
 			for (var module : runnableModules)
-			{
 				module.run();
-			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			logger.severe("An exception occured: " + e.getMessage());
 		}
+
+		samplesPlayed += getSamplesPerExecution();
 	}
 }

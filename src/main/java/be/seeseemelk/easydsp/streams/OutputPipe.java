@@ -2,6 +2,9 @@ package be.seeseemelk.easydsp.streams;
 
 import be.seeseemelk.easydsp.modules.Module;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * An output port allows to send back audio samples to a destination.
  */
@@ -10,12 +13,35 @@ public class OutputPipe
 	private final Module module;
 	private final String name;
 	private final OutputPort handler;
+	private final Set<InputPipe> inputs = new HashSet<>();
 
 	public OutputPipe(Module module, String name, OutputPort handler)
 	{
 		this.module = module;
 		this.name = name;
 		this.handler = handler;
+	}
+
+	void connect(InputPipe input)
+	{
+		inputs.add(input);
+	}
+
+	public void disconnectAll()
+	{
+		for (var input : new HashSet<>(inputs))
+			disconnect(input);
+	}
+
+	public void disconnect(InputPipe input)
+	{
+		input.doDisconnect();
+		doDisconnect(input);
+	}
+
+	public void doDisconnect(InputPipe input)
+	{
+		inputs.remove(input);
 	}
 
 	public Module getModule()
@@ -28,9 +54,9 @@ public class OutputPipe
 		return name;
 	}
 
-	public void read(float[] buffer)
+	public boolean read(float[] buffer)
 	{
-		handler.read(buffer);
+		return handler.read(buffer);
 	}
 
 	@Override
