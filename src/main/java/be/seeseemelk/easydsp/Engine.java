@@ -159,10 +159,10 @@ public class Engine
 	{
 		try
 		{
-			for (var module : modules)
+			for (var module : new ArrayList<>(modules))
 				module.onCycle();
 
-			for (var module : runnableModules)
+			for (var module : new ArrayList<>(runnableModules))
 				module.run();
 		}
 		catch (Exception e)

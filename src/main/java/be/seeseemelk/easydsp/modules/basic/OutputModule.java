@@ -1,6 +1,10 @@
-package be.seeseemelk.easydsp.modules;
+package be.seeseemelk.easydsp.modules.basic;
 
+import be.seeseemelk.easydsp.modules.DSPModule;
+import be.seeseemelk.easydsp.modules.ModuleGroup;
+import be.seeseemelk.easydsp.modules.RunnableModule;
 import be.seeseemelk.easydsp.streams.InputPipe;
+import be.seeseemelk.easydsp.ui.components.VolumeSlider;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -38,14 +42,7 @@ public class OutputModule extends RunnableModule
 		line.start();
 
 		// Add slider
-		int maxValue = 10_000;
-		JSlider slider = new JSlider(0, maxValue, maxValue);
-		slider.setPaintTicks(true);
-		slider.setMinorTickSpacing(1000);
-		slider.addChangeListener(e -> {
-			volume = ((float) slider.getValue()) / maxValue;
-		});
-		addOption("Volume", slider);
+		addOption("Volume", new VolumeSlider(volume -> this.volume = volume, 0.1f));
 	}
 
 	@Override

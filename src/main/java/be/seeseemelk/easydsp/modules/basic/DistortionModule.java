@@ -1,5 +1,7 @@
-package be.seeseemelk.easydsp.modules;
+package be.seeseemelk.easydsp.modules.basic;
 
+import be.seeseemelk.easydsp.modules.DSPModule;
+import be.seeseemelk.easydsp.modules.Module;
 import be.seeseemelk.easydsp.streams.InputPipe;
 import be.seeseemelk.easydsp.streams.OutputPort;
 
@@ -21,11 +23,11 @@ public class DistortionModule extends Module implements OutputPort
 		input = createInput("Input");
 		createOutput("Output", this);
 
-		int minValue =    10_000;
-		int maxValue = 1_000_000;
+		int minValue =      10_000;
+		int maxValue = 100_000_000;
 		JSlider slider = new JSlider(minValue, maxValue, maxValue);
 		slider.setPaintTicks(true);
-		slider.setMinorTickSpacing(50_000);
+		slider.setMinorTickSpacing(5_000_000);
 		slider.addChangeListener(e -> {
 			gain = ((float) slider.getValue()) / minValue;
 		});

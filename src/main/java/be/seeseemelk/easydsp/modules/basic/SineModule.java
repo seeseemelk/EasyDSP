@@ -1,13 +1,18 @@
-package be.seeseemelk.easydsp.modules;
+package be.seeseemelk.easydsp.modules.basic;
 
 import javax.swing.JSlider;
 
+import be.seeseemelk.easydsp.modules.DSPModule;
+import be.seeseemelk.easydsp.modules.Module;
+import be.seeseemelk.easydsp.modules.ModuleGroup;
 import be.seeseemelk.easydsp.streams.OutputPort;
+import be.seeseemelk.easydsp.ui.components.VolumeSlider;
 
 @DSPModule(value = "Sine Generator", group = ModuleGroup.GENERATOR)
 public class SineModule extends Module implements OutputPort
 {
 	private float frequency = 200.0f;
+	private float volume;
 
 	@Override
 	public void init()
@@ -17,13 +22,14 @@ public class SineModule extends Module implements OutputPort
 		
 		createOutput("Sine", this);
 		
-		JSlider freqSlider = new JSlider(20, 15000, 200);
+		JSlider freqSlider = new JSlider(0, 10000, 200);
 		freqSlider.setPaintTicks(true);
 		freqSlider.setMinorTickSpacing(1000);
 		freqSlider.addChangeListener(e -> {
 			frequency = (float) freqSlider.getValue();
 		});
 		addOption("Frequency", freqSlider);
+		addOption("Volume", new VolumeSlider(volume -> this.volume = volume, 0.5f));
 	}
 
 	@Override
@@ -33,7 +39,7 @@ public class SineModule extends Module implements OutputPort
 		long samples = getEngine().getSamplesPlayed();
 
 		for (int i = 0; i < buffer.length; i++)
-			buffer[i] = (float) Math.sin((samples + i) / sampleRate * frequency * Math.PI);
+			buffer[i] = (float) Math.sin((samples + i) / sampleRate * frequency * Math.PI) * volume;
 
 		return true;
 	}

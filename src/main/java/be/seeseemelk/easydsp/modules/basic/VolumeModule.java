@@ -1,9 +1,14 @@
-package be.seeseemelk.easydsp.modules;
+package be.seeseemelk.easydsp.modules.basic;
 
+import be.seeseemelk.easydsp.modules.DSPModule;
+import be.seeseemelk.easydsp.modules.Module;
+import be.seeseemelk.easydsp.modules.ModuleGroup;
 import be.seeseemelk.easydsp.streams.InputPipe;
 import be.seeseemelk.easydsp.streams.OutputPort;
+import be.seeseemelk.easydsp.ui.components.VolumeSlider;
 
 import javax.swing.*;
+import java.awt.*;
 
 @DSPModule(value = "Volume", group = ModuleGroup.EFFECT)
 public class VolumeModule extends Module implements OutputPort
@@ -14,17 +19,14 @@ public class VolumeModule extends Module implements OutputPort
 	@Override
 	public void init() throws Exception
 	{
+		setDescription("Allows the volume of a stream to be modified. Some more text. Some more text. Some more text.");
+		setColor(new Color(84, 95, 227));
+
 		input = createInput("Input");
 		createOutput("Output", this);
 
 		int maxValue = 10_000;
-		JSlider slider = new JSlider(0, maxValue, maxValue);
-		slider.setPaintTicks(true);
-		slider.setMinorTickSpacing(1000);
-		slider.addChangeListener(e -> {
-			volume = ((float) slider.getValue()) / maxValue;
-		});
-		addOption("Volume", slider);
+		addOption("Volume", new VolumeSlider(vol -> volume = vol));
 	}
 
 	@Override

@@ -54,7 +54,7 @@ public abstract class Module
 		this.engine = engine;
 	}
 	
-	protected void addOption(String name, JComponent component)
+	public void addOption(String name, JComponent component)
 	{
 		options.add(component);
 		optionNames.put(component, name);

@@ -5,6 +5,7 @@ public enum ModuleGroup
 	BASIC("Basic"),
 	GENERATOR("Generators"),
 	EFFECT("Effects"),
+	FILTER("Filters and Gates"),
 	OTHER("Other");
 
 	private final String name;
