@@ -5,11 +5,14 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import org.reflections.Reflections;
 
 import be.seeseemelk.easydsp.modules.DSPModule;
 import be.seeseemelk.easydsp.modules.Module;
 import be.seeseemelk.easydsp.ui.MainWindow;
-import org.reflections.Reflections;
 
 public class EasyDSP
 {
@@ -28,10 +31,25 @@ public class EasyDSP
 	public void open()
 	{
 		SwingUtilities.invokeLater(() -> {
+			loadLookAndFeel();
 			loadAnnotatedModules();
 			window = new MainWindow(engine);
 			window.setVisible(true);
 		});
+	}
+	
+	private void loadLookAndFeel()
+	{
+		try
+		{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e)
+		{
+			logger.severe("Failed to set native look and feel");
+			e.printStackTrace();
+		}
 	}
 	
 	private void loadAnnotatedModules()
