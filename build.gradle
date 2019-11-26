@@ -1,8 +1,8 @@
 plugins {
     id 'java'
     id 'application'
-	id 'eclipse'
-	id 'idea'
+    id 'eclipse'
+    id 'idea'
     id 'com.github.johnrengelman.shadow' version '5.0.0'
 }
 
@@ -12,13 +12,14 @@ repositories {
 
 dependencies {
     implementation 'com.google.guava:guava:27.0.1-jre'
-	implementation 'org.reflections:reflections:0.9.11'
+    implementation 'org.reflections:reflections:0.9.11'
     implementation  'com.miglayout:miglayout:3.7.4'
 
     testImplementation 'junit:junit:4.12'
 }
 
-sourceCompatibility = '12'
-targetCompatibility = '12'
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 mainClassName = 'be.seeseemelk.easydsp.EasyDSP'
+

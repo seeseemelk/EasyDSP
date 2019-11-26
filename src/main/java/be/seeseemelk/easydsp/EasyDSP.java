@@ -8,7 +8,6 @@ import javax.swing.SwingUtilities;
 
 import be.seeseemelk.easydsp.modules.DSPModule;
 import be.seeseemelk.easydsp.modules.Module;
-import be.seeseemelk.easydsp.modules.ModuleFactory;
 import be.seeseemelk.easydsp.ui.MainWindow;
 import org.reflections.Reflections;
 

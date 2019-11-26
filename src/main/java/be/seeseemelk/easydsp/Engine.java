@@ -1,17 +1,14 @@
 package be.seeseemelk.easydsp;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.logging.Logger;
+
 import be.seeseemelk.easydsp.modules.Module;
 import be.seeseemelk.easydsp.modules.ModuleFactory;
 import be.seeseemelk.easydsp.modules.RunnableModule;
-import be.seeseemelk.easydsp.streams.InputPipe;
-import be.seeseemelk.easydsp.streams.OutputPipe;
-
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.logging.Logger;
 
 public class Engine
 {
@@ -22,8 +19,8 @@ public class Engine
 	private int nextModuleId = 0;
 	private double runtime = 0;
 	private boolean running = false;
-	private ExecutorService threadPool = Executors.newCachedThreadPool();
-	private Timer timer;
+	//private ExecutorService threadPool = Executors.newCachedThreadPool();
+	//private Timer timer;
 	private float sampleRate = 44100f;
 	private long executionInterval = 10;
 	private long samplesPlayed = 0;
@@ -130,7 +127,7 @@ public class Engine
 
 		samplesPlayed = 0;
 		running = true;
-		timer = new Timer();
+		/*timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask()
 		{
 			@Override
@@ -138,7 +135,9 @@ public class Engine
 			{
 				execute();
 			}
-		}, executionInterval, executionInterval);
+		}, executionInterval, executionInterval);*/
+		var thread = new Thread(this::execute);
+		thread.start();
 	}
 
 	public void stop()
@@ -147,7 +146,6 @@ public class Engine
 			module.onStop();
 
 		running = false;
-		timer.cancel();
 	}
 
 	public boolean isRunning()
@@ -157,20 +155,22 @@ public class Engine
 
 	private void execute()
 	{
-		try
+		while (running)
 		{
-			for (var module : new ArrayList<>(modules))
-				module.onCycle();
+			try
+			{
+				for (var module : new ArrayList<>(modules))
+					module.onCycle();
 
-			for (var module : new ArrayList<>(runnableModules))
-				module.run();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			logger.severe("An exception occured: " + e.getMessage());
-		}
+				for (var module : new ArrayList<>(runnableModules))
+					module.run();
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+				logger.severe("An exception occured: " + e.getMessage());
+			}
 
-		samplesPlayed += getSamplesPerExecution();
+			samplesPlayed += getSamplesPerExecution();
+		}
 	}
 }
