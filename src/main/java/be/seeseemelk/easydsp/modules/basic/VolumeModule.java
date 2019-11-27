@@ -1,14 +1,13 @@
 package be.seeseemelk.easydsp.modules.basic;
 
+import java.awt.Color;
+
 import be.seeseemelk.easydsp.modules.DSPModule;
 import be.seeseemelk.easydsp.modules.Module;
 import be.seeseemelk.easydsp.modules.ModuleGroup;
 import be.seeseemelk.easydsp.streams.InputPipe;
 import be.seeseemelk.easydsp.streams.OutputPort;
 import be.seeseemelk.easydsp.ui.components.VolumeSlider;
-
-import javax.swing.*;
-import java.awt.*;
 
 @DSPModule(value = "Volume", group = ModuleGroup.EFFECT)
 public class VolumeModule extends Module implements OutputPort

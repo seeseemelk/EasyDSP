@@ -1,14 +1,18 @@
 package be.seeseemelk.easydsp.modules.basic;
 
+import java.awt.Color;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
+
 import be.seeseemelk.easydsp.modules.DSPModule;
 import be.seeseemelk.easydsp.modules.ModuleGroup;
 import be.seeseemelk.easydsp.modules.RunnableModule;
 import be.seeseemelk.easydsp.streams.InputPipe;
 import be.seeseemelk.easydsp.ui.components.VolumeSlider;
-
-import javax.sound.sampled.*;
-import javax.swing.*;
-import java.awt.*;
 
 @DSPModule(value = "Output", group = ModuleGroup.BASIC)
 public class OutputModule extends RunnableModule

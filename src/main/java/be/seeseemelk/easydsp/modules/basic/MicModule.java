@@ -1,15 +1,18 @@
 package be.seeseemelk.easydsp.modules.basic;
 
+import java.awt.Color;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.TargetDataLine;
+
 import be.seeseemelk.easydsp.modules.DSPModule;
 import be.seeseemelk.easydsp.modules.Module;
 import be.seeseemelk.easydsp.modules.ModuleGroup;
 import be.seeseemelk.easydsp.streams.OutputPort;
 import be.seeseemelk.easydsp.ui.components.VolumeSlider;
-
-import javax.sound.sampled.*;
-import javax.swing.*;
-import java.awt.*;
-import java.lang.annotation.Target;
 
 @DSPModule(value = "Microphone", group = ModuleGroup.BASIC)
 public class MicModule extends Module implements OutputPort
