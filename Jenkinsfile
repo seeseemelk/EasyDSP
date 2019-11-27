@@ -18,7 +18,7 @@ pipeline {
     }
     stage('Publish') {
       steps {
-        archiveArtifacts './build/libs/*.jar'
+        archiveArtifacts 'build/libs/*.jar'
       }
     }
   }
