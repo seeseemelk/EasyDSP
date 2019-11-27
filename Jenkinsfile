@@ -2,6 +2,12 @@ pipeline {
   agent any
   stages {
     stage('Build') {
+      agent {
+        docker {
+          image 'openjdk:11'
+        }
+
+      }
       steps {
         sh './gradlew shadowJar'
       }
