@@ -1,9 +1,5 @@
 package be.seeseemelk.easydsp.ui.components;
 
-import be.seeseemelk.easydsp.modules.Module;
-
-import javax.swing.*;
-import java.awt.*;
 import java.util.function.Consumer;
 
 public class VolumeSlider extends Slider<Float>

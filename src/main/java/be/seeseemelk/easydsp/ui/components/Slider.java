@@ -1,9 +1,12 @@
 package be.seeseemelk.easydsp.ui.components;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
 
 public class Slider<T> extends JPanel
 {

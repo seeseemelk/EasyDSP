@@ -1,17 +1,17 @@
 package be.seeseemelk.easydsp.ui;
 
-import be.seeseemelk.easydsp.Engine;
-import be.seeseemelk.easydsp.modules.ModuleFactory;
-import be.seeseemelk.easydsp.modules.ModuleGroup;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
+
+import be.seeseemelk.easydsp.Engine;
+import be.seeseemelk.easydsp.modules.ModuleFactory;
+import be.seeseemelk.easydsp.modules.ModuleGroup;
 
 public class ModuleTreeModel implements TreeModel
 {

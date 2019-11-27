@@ -1,13 +1,23 @@
 package be.seeseemelk.easydsp.ui;
 
-import be.seeseemelk.easydsp.Engine;
-import be.seeseemelk.easydsp.modules.ModuleFactory;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
+
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JSplitPane;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
+import javax.swing.JTree;
+import javax.swing.WindowConstants;
+
+import be.seeseemelk.easydsp.Engine;
+import be.seeseemelk.easydsp.modules.ModuleFactory;
 
 public class MainWindow extends JFrame
 {

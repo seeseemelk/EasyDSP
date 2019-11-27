@@ -1,14 +1,13 @@
 package be.seeseemelk.easydsp.modules.basic;
 
-import be.seeseemelk.easydsp.Util;
+import java.util.Arrays;
+
 import be.seeseemelk.easydsp.modules.DSPModule;
 import be.seeseemelk.easydsp.modules.Module;
 import be.seeseemelk.easydsp.modules.ModuleGroup;
 import be.seeseemelk.easydsp.streams.InputPipe;
 import be.seeseemelk.easydsp.streams.OutputPort;
 import be.seeseemelk.easydsp.ui.components.VolumeSlider;
-
-import java.util.Arrays;
 
 @DSPModule(value = "Volume Gate", group = ModuleGroup.FILTER)
 public class VolumeGateModule extends Module implements OutputPort
