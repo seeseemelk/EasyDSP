@@ -14,8 +14,10 @@ dependencies {
     implementation 'com.google.guava:guava:27.0.1-jre'
     implementation 'org.reflections:reflections:0.9.11'
     implementation  'com.miglayout:miglayout:3.7.4'
-
-    testImplementation 'junit:junit:4.12'
+    
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+	testImplementation 'org.hamcrest:hamcrest-library:2.2'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -23,3 +25,6 @@ targetCompatibility = JavaVersion.VERSION_11
 
 mainClassName = 'be.seeseemelk.easydsp.EasyDSP'
 
+test {
+	useJUnitPlatform()
+}
